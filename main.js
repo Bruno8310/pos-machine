@@ -1,45 +1,42 @@
 function printReceipt(barcodes) {
     // 模拟商品数据信息
-    const goodsInfo = [
+    const goodsInfo = [{
+            barcode: 'ITEM000000',
+            name: 'Coca-Cola',
+            price: 3
+        },
         {
-           barcode: 'ITEM000000',
-           name: 'Coca-Cola',
-           price: 3
-         },
-         {
-           barcode: 'ITEM000001',
-           name: 'Sprite',
-           price: 3
-         },
-         {
-           barcode: 'ITEM000002',
-           name: 'Apple',
-           price: 5
-         },
-         {
-           barcode: 'ITEM000003',
-           name: 'Litchi',
-           price: 15
-         },
-         {
-           barcode: 'ITEM000004',
-           name: 'Battery',
-           price: 2
-         },
-         {
-           barcode: 'ITEM000005',
-           name: 'Instant Noodles',
-           price: 4
-         }
-     ];
-     const goodsItem = decodeBarcodes(goodsInfo, barcodes);
+            barcode: 'ITEM000001',
+            name: 'Sprite',
+            price: 3
+        },
+        {
+            barcode: 'ITEM000002',
+            name: 'Apple',
+            price: 5
+        },
+        {
+            barcode: 'ITEM000003',
+            name: 'Litchi',
+            price: 15
+        },
+        {
+            barcode: 'ITEM000004',
+            name: 'Battery',
+            price: 2,
+            
+        },
+        {
+            barcode: 'ITEM000005',
+            name: 'Instant Noodles',
+            price: 4
+        }
+    ];
 
-     var receipt = calculateItem(goodsItem);
-
-
-
-
+    const goodsItem = decodeBarcodes(goodsInfo, barcodes);
+    return calculateItem(goodsItem);
 }
+
 /**
  * 统计一组商品码中各个码的次数，并匹配到指定商品信息
  * 
@@ -54,17 +51,16 @@ function decodeBarcodes(goodsInfo, barcodes) {
         let goods = goodsInfo[i];
         // 当前商品在一组商品码中的次数
         let goodsNumber;
-        for(let j = 0; j < barcodes.length; j++) {
+        for (let j = 0; j < barcodes.length; j++) {
             // 判断统计
-            if(goods.barcode === barcodes[j]) {
+            if (goods.barcode === barcodes[j]) {
                 goodsNumber++;
             }
         }
-        if(goodsNumber != 0) {
+        if (goodsNumber != 0) {
             // 动态创建新的属性，并赋值
             goods.number = goodsNumber;
             // goods[number] = goodsNumber;
-
             // 将新的商品对象添加到数组中
             decodeBarcodes.push(goods);
         }
@@ -78,9 +74,8 @@ function decodeBarcodes(goodsInfo, barcodes) {
  * @param {*} goodsItem 商品信息
  */
 function calculateItem(goodsItem) {
-    
     // 循环遍历
-    for(let k = 0; k < goodsItem.length; k++) {
+    for (let k = 0; k < goodsItem.length; k++) {
         let subTotal = subtotalPrcie(goodsItem[k]);
         goodsItem[k].Subtotal = subTotal;
     }
@@ -105,32 +100,35 @@ function subtotalPrcie(goods) {
  */
 function totalPrice(goodsItem) {
     let total = 0
-    for(let m = 0; m < goodsItem.length; m++) {
+    for (let m = 0; m < goodsItem.length; m++) {
         total += goodsItem[k].Subtotal;
     }
     return total;
 }
 
-
+/**
+ * 格式化在控制台打印输出
+ * 
+ * @param {*} goodsItem 
+ * @param {*} total 
+ */
 function formatPrintReceipt(goodsItem, total) {
     let receiptList = new Array(goodsItem.length);
-    for(let n = 0; n < goodsItem.length; n++) {
+    for (let n = 0; n < goodsItem.length; n++) {
         let goods = new Object();
         goods.Name = goodsItem[n].name;
         goods.Quantity = goodsItem[n].number;
         // 与需求不合，变量命名规范
-        goods. Unit_price =goodsItem[n].price + " (yuan) ";
+        goods.Unit_price = goodsItem[n].price + " (yuan) ";
         goods.Subtotal = goodsItem[n].Subtotal;
         receiptList.push(goods);
     }
     console.log("***<store earning no money>Receipt ***\n");
-    console.log(receiptList.join());
+    console.log(receiptList.join()+ "\n");
     console.log("\n----------------------");
     console.log("Total:" + total + " (yuan) \n");
     console.log("**********************")
-
 }
-
 module.exports = {
     printReceipt
 };
